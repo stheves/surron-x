@@ -6,6 +6,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const CopyPlugin = require('copy-webpack-plugin');
+
 const TerserPlugin = require('terser-webpack-plugin');
 
 const appDir = fs.realpathSync(process.cwd());
@@ -15,6 +17,7 @@ const paths = {
     appHtml: resolveApp('src/index.html'),
     appIndexJs: resolveApp('src/index.tsx'),
     appContentBase: resolveApp('public'),
+    appBuild: resolveApp('dist'),
 };
 
 const publicPath = './';
@@ -40,6 +43,14 @@ module.exports = {
         new MiniCssExtractPlugin({ filename: 'static/styles.[contenthash:8].css' }),
         new HtmlWebpackPlugin({
             template: paths.appHtml,
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.join(paths.appSrc, '**/*.php'),
+                    to: paths.appBuild,
+                },
+            ],
         }),
     ],
 
