@@ -8,6 +8,7 @@
         "target": "es5",
         "allowJs": false,
         "importHelpers": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "jsx": "react"
     }
 }
