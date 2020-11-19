@@ -12,6 +12,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const appDir = fs.realpathSync(process.cwd());
 const resolveApp = appPath => path.resolve(appDir, appPath);
+
 const paths = {
     appSrc: resolveApp('src'),
     appHtml: resolveApp('src/index.html'),
@@ -20,41 +21,14 @@ const paths = {
     appBuild: resolveApp('dist'),
 };
 
-const publicPath = './';
-
-const devServer = isEnvDevelopment
-    ? {
-          publicPath: '/',
-          contentBase: paths.appContentBase,
-          historyApiFallback: true,
-          port: 13000,
-      }
-    : undefined;
-
-const plugins = [
-    isEnvProduction && new webpack.ProgressPlugin(),
-    isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
-    new HtmlWebpackPlugin({
-        template: paths.appHtml,
-        publicPath: publicPath,
-        cache: isEnvDevelopment,
-        minify: isEnvProduction,
-    }),
-    new CopyPlugin({
-        patterns: [
-            {
-                from: path.join(paths.appSrc, '**/*.php'),
-                to: paths.appBuild,
-                context: paths.appSrc,
-            },
-        ],
-    }),
-].filter(Boolean);
-
 module.exports = (env, argv) => {
     const isEnvDevelopment = argv.mode === 'development';
     const isEnvProduction = argv.mode === 'production';
     const { mode = 'production' } = argv;
+
+    const publicPath = env.ASSET_PATH || '/';
+
+    console.log(`Public path: ${publicPath}`);
 
     return {
         mode: mode,
@@ -65,8 +39,33 @@ module.exports = (env, argv) => {
             publicPath: publicPath,
         },
 
-        devServer,
-        plugins,
+        devServer: isEnvDevelopment
+            ? {
+                  publicPath: '/',
+                  contentBase: paths.appContentBase,
+                  historyApiFallback: true,
+                  port: 13000,
+              }
+            : undefined,
+        plugins: [
+            isEnvProduction && new webpack.ProgressPlugin(),
+            isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
+            new HtmlWebpackPlugin({
+                template: paths.appHtml,
+                publicPath: publicPath,
+                cache: isEnvDevelopment,
+                minify: isEnvProduction,
+            }),
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: path.join(paths.appSrc, '**/*.php'),
+                        to: paths.appBuild,
+                        context: paths.appSrc,
+                    },
+                ],
+            }),
+        ].filter(Boolean),
 
         module: {
             rules: [
@@ -74,7 +73,6 @@ module.exports = (env, argv) => {
                     test: /\.(ts|tsx)$/,
                     loader: 'ts-loader',
                     include: paths.appSrc,
-                    exclude: [/node_modules/],
                 },
                 {
                     test: /.css$/,
@@ -99,10 +97,7 @@ module.exports = (env, argv) => {
         },
 
         optimization: {
-            minimizer: [
-                new TerserPlugin({ minify: isEnvProduction, terserOptions: { compress: isEnvProduction, sourceMap: isEnvDevelopment } }),
-            ],
-
+            minimizer: [new TerserPlugin({ terserOptions: { compress: isEnvProduction, sourceMap: isEnvDevelopment } })],
             splitChunks: isEnvProduction
                 ? {
                       cacheGroups: {

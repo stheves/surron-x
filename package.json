@@ -2,8 +2,8 @@
     "name": "surron-x",
     "scripts": {
         "debug": "webpack serve --mode=development",
-        "build": "run clean && webpack --mode=production",
-        "clean": "rm -f -r dist/**"
+        "build": "run clean && webpack --mode=production --env ASSET_PATH=/wp-content/themes/surron-x/",
+        "clean": "yarn exec rm -rf 'dist/*'"
     },
     "devDependencies": {
         "@types/bootstrap": "^4",
