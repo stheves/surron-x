@@ -10,19 +10,36 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const appDir = fs.realpathSync(process.cwd());
 const resolveApp = appPath => path.resolve(appDir, appPath);
-const paths = { appSrc: resolveApp('src'), appHtml: resolveApp('src/index.html'), appIndexJs: resolveApp('src/index.tsx') };
+const paths = {
+    appSrc: resolveApp('src'),
+    appHtml: resolveApp('src/index.html'),
+    appIndexJs: resolveApp('src/index.tsx'),
+    appContentBase: resolveApp('public'),
+};
+
+const publicPath = './';
 
 module.exports = {
     mode: 'development',
     entry: paths.appIndexJs,
 
+    output: {
+        filename: 'main.[contenthash:8].js',
+        publicPath: publicPath,
+    },
+
+    devServer: {
+        publicPath: '/',
+        contentBase: paths.appContentBase,
+        historyApiFallback: true,
+        port: 13000,
+    },
+
     plugins: [
         new webpack.ProgressPlugin(),
-        new MiniCssExtractPlugin({ filename: 'static/styles.[chunkhash].css' }),
+        new MiniCssExtractPlugin({ filename: 'static/styles.[contenthash:8].css' }),
         new HtmlWebpackPlugin({
-            filename: 'index.html',
             template: paths.appHtml,
-            inject: true,
         }),
     ],
 
@@ -72,4 +89,5 @@ module.exports = {
             name: false,
         },
     },
+    stats: 'errors-only',
 };
