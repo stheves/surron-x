@@ -22,87 +22,94 @@ const paths = {
 
 const publicPath = './';
 
-module.exports = {
-    mode: 'development',
-    entry: paths.appIndexJs,
+module.exports = (env, argv) => {
+    const isEnvDevelopment = argv.mode === 'development';
+    const isEnvProduction = argv.mode === 'production';
+    const { mode } = argv;
+    return {
+        mode: mode,
+        entry: paths.appIndexJs,
 
-    output: {
-        filename: 'main.[contenthash:8].js',
-        publicPath: publicPath,
-    },
-
-    devServer: {
-        publicPath: '/',
-        contentBase: paths.appContentBase,
-        historyApiFallback: true,
-        port: 13000,
-    },
-
-    plugins: [
-        new webpack.ProgressPlugin(),
-        new MiniCssExtractPlugin({ filename: 'static/styles.[contenthash:8].css' }),
-        new HtmlWebpackPlugin({
-            template: paths.appHtml,
+        output: {
+            filename: 'main.[chunkhash].js',
             publicPath: publicPath,
-            cache: false,
-        }),
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: path.join(paths.appSrc, '**/*.php'),
-                    to: paths.appBuild,
-                    context: paths.appSrc,
-                },
-            ],
-        }),
-    ],
+        },
 
-    module: {
-        rules: [
-            {
-                test: /\.(ts|tsx)$/,
-                loader: 'ts-loader',
-                include: paths.appSrc,
-                exclude: [/node_modules/],
-            },
-            {
-                test: /.css$/,
-                use: [
-                    //        MiniCssExtractPlugin.loader,
+        devServer: isEnvDevelopment
+            ? {
+                  publicPath: '/',
+                  contentBase: paths.appContentBase,
+                  historyApiFallback: true,
+                  port: 13000,
+              }
+            : undefined,
+
+        plugins: [
+            isEnvProduction && new webpack.ProgressPlugin(),
+            isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
+            new HtmlWebpackPlugin({
+                template: paths.appHtml,
+                publicPath: publicPath,
+                cache: false,
+            }),
+            new CopyPlugin({
+                patterns: [
                     {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                        },
+                        from: path.join(paths.appSrc, '**/*.php'),
+                        to: paths.appBuild,
+                        context: paths.appSrc,
                     },
                 ],
-            },
-        ],
-    },
+            }),
+        ].filter(Boolean),
 
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-    },
-
-    optimization: {
-        minimizer: [new TerserPlugin()],
-
-        splitChunks: {
-            cacheGroups: {
-                vendors: {
-                    priority: -10,
-                    test: /[\\/]node_modules[\\/]/,
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/,
+                    loader: 'ts-loader',
+                    include: paths.appSrc,
+                    exclude: [/node_modules/],
                 },
-            },
-
-            chunks: 'async',
-            minChunks: 1,
-            minSize: 30000,
-            name: false,
+                {
+                    test: /.css$/,
+                    use: [
+                        isEnvProduction && MiniCssExtractPlugin.loader,
+                        isEnvDevelopment && {
+                            loader: 'style-loader',
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                    ].filter(Boolean),
+                },
+            ],
         },
-    },
-    stats: 'errors-only',
+
+        resolve: {
+            extensions: ['.tsx', '.ts', '.js'],
+        },
+
+        optimization: {
+            minimizer: [new TerserPlugin()],
+
+            splitChunks: {
+                cacheGroups: {
+                    vendors: {
+                        priority: -10,
+                        test: /[\\/]node_modules[\\/]/,
+                    },
+                },
+
+                chunks: 'async',
+                minChunks: 1,
+                minSize: 30000,
+                name: false,
+            },
+        },
+        stats: 'errors-only',
+    };
 };
