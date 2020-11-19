@@ -16,6 +16,8 @@ services:
         ports:
             - '18000:80'
         restart: always
+        volumes:
+            - ./src:/var/www/html/wp-content/themes/surron-x
         environment:
             - WORDPRESS_DB_HOST=db
             - WORDPRESS_DB_USER=wordpress

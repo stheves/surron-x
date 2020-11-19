@@ -306,6 +306,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prop-types@npm:*":
+  version: 15.7.3
+  resolution: "@types/prop-types@npm:15.7.3"
+  checksum: bd0eab69d5120ad3784d0c9985f902653d5924707a7f2b3702a330e762dfd61b6494954cb54ad0c52b918ffd6f1e7e27c9270e4442bc15250de348596f2f60cb
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^16.9.9":
+  version: 16.9.9
+  resolution: "@types/react-dom@npm:16.9.9"
+  dependencies:
+    "@types/react": "*"
+  checksum: d92c166f5bcd483f175311eec9c472893216d486106a5b5402eb293840c0b0d1aafb484a3fe3f0f4622ae1f6dff46c9fe970873d4dac7fdf70a50931d3cab4a0
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:*, @types/react@npm:^16.9.56":
+  version: 16.9.56
+  resolution: "@types/react@npm:16.9.56"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^3.0.2
+  checksum: 139867e2b3d577723b9361234f105d0cf1b143202f51fef207355332f972dd74030cfb3918037cb311eefd203ee06e0a370c37755204eefdd35734f0fde070a1
+  languageName: node
+  linkType: hard
+
 "@types/responselike@npm:*, @types/responselike@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/responselike@npm:1.0.0"
@@ -1313,6 +1339,13 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 51f10036f5f1de781be98f4738d58b50c6d44f4f471069b8ab075b21605893ba1548654880f7310a29a732d6fc7cd481da6026169b9f0831cab0148a62fb397a
+  languageName: node
+  linkType: hard
+
+"csstype@npm:^3.0.2":
+  version: 3.0.5
+  resolution: "csstype@npm:3.0.5"
+  checksum: d15967edea15457961ab1e3f1c4080c83792a595055551a087923b2fb67fffaddaa2eedafe10f665d12dc3f493af03c08322c9410fcd58e3dcf48104de15043c
   languageName: node
   linkType: hard
 
@@ -3673,6 +3706,8 @@ __metadata:
   dependencies:
     "@types/eslint": ^7
     "@types/prettier": ^2
+    "@types/react": ^16.9.56
+    "@types/react-dom": ^16.9.9
     "@typescript-eslint/eslint-plugin": ^4.0.0
     "@typescript-eslint/parser": ^4.0.0
     "@yarnpkg/pnpify": ^2.3.3
@@ -3687,6 +3722,7 @@ __metadata:
     prettier: ^2.1.2
     react: ^17.0.1
     react-dom: ^17.0.1
+    tslib: ^2.0.3
     typescript: ^4.0.5
     webpack: ^5.5.1
     webpack-cli: ^4.2.0
@@ -3812,6 +3848,13 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: f44fe7f216946b17d3e3074df3746372703cf24e9127b4c045511456e8e4bf25515fb0a1bb3937676cc305651c5d4fcb6377b0588a4c6a957e748c4c28905d17
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "tslib@npm:2.0.3"
+  checksum: 447bfca5deaa157806c3f77eaba74d05dd0b38b014e47ce79d98b5c77ce7d91b00a687ba13ca1b5a74d35ca1098ac7a072c0a97fad06f0266612f2a03a6c8e8f
   languageName: node
   linkType: hard
 
