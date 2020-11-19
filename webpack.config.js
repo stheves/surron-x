@@ -22,10 +22,40 @@ const paths = {
 
 const publicPath = './';
 
+const devServer = isEnvDevelopment
+    ? {
+          publicPath: '/',
+          contentBase: paths.appContentBase,
+          historyApiFallback: true,
+          port: 13000,
+      }
+    : undefined;
+
+const plugins = [
+    isEnvProduction && new webpack.ProgressPlugin(),
+    isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
+    new HtmlWebpackPlugin({
+        template: paths.appHtml,
+        publicPath: publicPath,
+        cache: isEnvDevelopment,
+        minify: isEnvProduction,
+    }),
+    new CopyPlugin({
+        patterns: [
+            {
+                from: path.join(paths.appSrc, '**/*.php'),
+                to: paths.appBuild,
+                context: paths.appSrc,
+            },
+        ],
+    }),
+].filter(Boolean);
+
 module.exports = (env, argv) => {
     const isEnvDevelopment = argv.mode === 'development';
     const isEnvProduction = argv.mode === 'production';
-    const { mode } = argv;
+    const { mode = 'production' } = argv;
+
     return {
         mode: mode,
         entry: paths.appIndexJs,
@@ -35,33 +65,8 @@ module.exports = (env, argv) => {
             publicPath: publicPath,
         },
 
-        devServer: isEnvDevelopment
-            ? {
-                  publicPath: '/',
-                  contentBase: paths.appContentBase,
-                  historyApiFallback: true,
-                  port: 13000,
-              }
-            : undefined,
-
-        plugins: [
-            isEnvProduction && new webpack.ProgressPlugin(),
-            isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
-            new HtmlWebpackPlugin({
-                template: paths.appHtml,
-                publicPath: publicPath,
-                cache: false,
-            }),
-            new CopyPlugin({
-                patterns: [
-                    {
-                        from: path.join(paths.appSrc, '**/*.php'),
-                        to: paths.appBuild,
-                        context: paths.appSrc,
-                    },
-                ],
-            }),
-        ].filter(Boolean),
+        devServer,
+        plugins,
 
         module: {
             rules: [
@@ -81,7 +86,7 @@ module.exports = (env, argv) => {
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap: true,
+                                sourceMap: isEnvDevelopment,
                             },
                         },
                     ].filter(Boolean),
@@ -94,21 +99,25 @@ module.exports = (env, argv) => {
         },
 
         optimization: {
-            minimizer: [new TerserPlugin()],
+            minimizer: [
+                new TerserPlugin({ minify: isEnvProduction, terserOptions: { compress: isEnvProduction, sourceMap: isEnvDevelopment } }),
+            ],
 
-            splitChunks: {
-                cacheGroups: {
-                    vendors: {
-                        priority: -10,
-                        test: /[\\/]node_modules[\\/]/,
-                    },
-                },
+            splitChunks: isEnvProduction
+                ? {
+                      cacheGroups: {
+                          vendors: {
+                              priority: -10,
+                              test: /[\\/]node_modules[\\/]/,
+                          },
+                      },
 
-                chunks: 'async',
-                minChunks: 1,
-                minSize: 30000,
-                name: false,
-            },
+                      chunks: 'async',
+                      minChunks: 1,
+                      minSize: 30000,
+                      name: false,
+                  }
+                : undefined,
         },
         stats: 'errors-only',
     };
