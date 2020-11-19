@@ -43,12 +43,15 @@ module.exports = {
         new MiniCssExtractPlugin({ filename: 'static/styles.[contenthash:8].css' }),
         new HtmlWebpackPlugin({
             template: paths.appHtml,
+            publicPath: publicPath,
+            cache: false,
         }),
         new CopyPlugin({
             patterns: [
                 {
                     from: path.join(paths.appSrc, '**/*.php'),
                     to: paths.appBuild,
+                    context: paths.appSrc,
                 },
             ],
         }),
@@ -65,6 +68,7 @@ module.exports = {
             {
                 test: /.css$/,
                 use: [
+                    //        MiniCssExtractPlugin.loader,
                     {
                         loader: 'style-loader',
                     },
