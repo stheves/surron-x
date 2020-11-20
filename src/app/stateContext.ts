@@ -10,7 +10,7 @@ export interface GlobalStateContext {
     state: GlobalAppState;
 }
 
-function createDefaultState(): GlobalAppState {
+export function createDefaultState(): GlobalAppState {
     return {
         app: {
             loading: false,

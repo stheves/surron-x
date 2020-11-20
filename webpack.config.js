@@ -15,9 +15,9 @@ const resolveApp = appPath => path.resolve(appDir, appPath);
 
 const paths = {
     appSrc: resolveApp('src'),
-    appHtml: resolveApp('src/index.html'),
     appIndexJs: resolveApp('src/index.tsx'),
     appContentBase: resolveApp('public'),
+    appIndexHtml: resolveApp('public/index.html'),
     appBuild: resolveApp('dist'),
 };
 
@@ -51,7 +51,7 @@ module.exports = (env, argv) => {
             isEnvProduction && new webpack.ProgressPlugin(),
             isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
             new HtmlWebpackPlugin({
-                template: paths.appHtml,
+                template: paths.appIndexHtml,
                 publicPath: publicPath,
                 cache: isEnvDevelopment,
                 minify: isEnvProduction,

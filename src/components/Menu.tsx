@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Badge, Button, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export interface MenuProps {}
@@ -22,9 +22,16 @@ const Menu: React.FC<MenuProps> = props => {
                     </NavDropdown>
                 </Nav>
             </Navbar.Collapse>
-            <Nav.Link href="#">
-                <FontAwesomeIcon icon={faShoppingCart} />
-            </Nav.Link>
+            <Nav className="justify-content-end">
+                <Button variant="outline-light" type="button" className="my-2 my-sm-0">
+                    <FontAwesomeIcon icon={faShoppingCart} size="lg" />
+                    <span className="small">
+                        <Badge variant="primary" className="align-top small" pill>
+                            3
+                        </Badge>
+                    </span>
+                </Button>
+            </Nav>
         </Navbar>
     );
 };

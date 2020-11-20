@@ -10,7 +10,7 @@ const HeaderCarousel = styled(Carousel)`
     height: 500px;
 `;
 
-export const Home: React.FC<HomeProps> = props => {
+export const FrontPage: React.FC<HomeProps> = props => {
     return (
         <HeaderCarousel>
             <Carousel.Item>
