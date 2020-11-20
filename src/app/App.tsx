@@ -1,11 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Footer } from '../templates/Footer';
-import { FrontPage } from '../templates/FrontPage';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Menu from '../components/Menu';
-import { NotFound } from '../components/NotFound';
-import { StateContext, createDefaultState, GlobalStateContext } from './stateContext';
+import { Footer } from '../templates/Footer';
+import Content from './Content';
+import { createDefaultState, GlobalStateContext, StateContext } from './stateContext';
 
 export interface AppProps {
     config?: any;
@@ -19,10 +18,7 @@ const App = (props: AppProps) => {
         <StateContext.Provider value={context}>
             <Router>
                 <Menu />
-                <Switch>
-                    <Route exact to="/" component={FrontPage} />
-                    <Route component={NotFound} />
-                </Switch>
+                <Content />
                 <Footer />
             </Router>
         </StateContext.Provider>
