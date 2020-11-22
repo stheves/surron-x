@@ -45,9 +45,14 @@ module.exports = (env, argv) => {
                   contentBase: paths.appContentBase,
                   historyApiFallback: true,
                   port: 13000,
+                  compress: true,
+                  proxy: {
+                      '/wp-json': 'http://localhost:18000',
+                  },
               }
             : undefined,
         plugins: [
+            isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
             isEnvProduction && new webpack.ProgressPlugin(),
             isEnvProduction && new MiniCssExtractPlugin({ filename: 'style.css' }),
             new HtmlWebpackPlugin({
@@ -59,9 +64,9 @@ module.exports = (env, argv) => {
             new CopyPlugin({
                 patterns: [
                     {
-                        from: path.join(paths.appSrc, '**/*.php'),
+                        from: path.join(paths.appContentBase, '**/*.php'),
                         to: paths.appBuild,
-                        context: paths.appSrc,
+                        context: paths.appContentBase,
                     },
                 ],
             }),

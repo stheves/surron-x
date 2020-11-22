@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Badge, Button, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export interface MenuProps {}
 
@@ -13,8 +14,9 @@ const Menu: React.FC<MenuProps> = props => {
             <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-center">
                 <Nav>
                     <Nav.Link href="/home">Home</Nav.Link>
+                    <Link to="/shop">Shop</Link>
                     <NavDropdown title="Shop" id="collapsible-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                        <NavDropdown.Item href="/shop">Shop</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                         <NavDropdown.Divider />
